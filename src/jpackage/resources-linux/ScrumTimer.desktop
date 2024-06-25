@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=ScrumTimer
+Comment=Small helper for timekeeping
+Exec=/opt/scrumtimer/bin/ScrumTimer
+Icon=/opt/scrumtimer/lib/ScrumTimer.png
+Terminal=false
+Type=Application
+Categories=Unknown
+MimeType=
+StartupWMClass=com-amadeus-tpe-src-sca-scrumtimer-MainFrame
