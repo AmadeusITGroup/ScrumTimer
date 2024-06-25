@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.amadeus.tpe.src.sca</groupId>
+    <artifactId>ScrumTimer</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <mainclass>com.amadeus.tpe.src.sca.scrumtimer.MainFrame</mainclass>
+    </properties>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.3.0</version>
+                <configuration>
+                    <outputDirectory>target/dist</outputDirectory>
+                    <archive>
+			<manifest>
+                            <addClasspath>true</addClasspath>
+                            <classpathPrefix>lib/</classpathPrefix>
+                            <mainClass>${mainclass}</mainClass>
+			</manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.6.1</version>
+                <executions>
+                    <execution>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/dist/lib</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
+                <configuration>
+                    <showDeprecation>true</showDeprecation>
+                </configuration>
+            </plugin>
+            <!-- we want to create an uber-jar -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.2.0</version>
+                
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>${mainclass}</mainClass>
+                        </manifest>
+                    </archive>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                </configuration>
+                
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+<!--
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.8</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                            <exec executable="jpackage" failonerror="true">
+                                    <arg line="- -version"/>
+                                </exec>
+                                <exec executable="jpackage" failonerror="true">
+                                    <arg line="- -help"/>
+                                </exec>
+                                <exec executable="jpackage" failonerror="true">
+                                    <arg line="- -input target/dist"/>
+                                    <arg line="- -main-jar ${project.artifactId}-${project.version}.jar"/>
+                                    <arg line="- -main-class ${mainclass}"/>
+                                    <arg line="- -dest target"/>
+                                    <arg line="- -name ${project.artifactId}"/>
+                                    <arg line="- -app-version 1.0.2"/>
+                                    <arg line="- -type msi"/>
+                                    <arg line="- -verbose"/>
+                                    <arg line="- -copyright Copyright"/>
+                                    <arg line="- -vendor Hiran"/>
+                                    <arg line="- -description 'Clock that stays visible during online meetings.'"/>
+                                    <arg line="- -win-shortcut"/>
+                                    <arg line="- -icon src/main/scrumtimer.ico"/>
+                                    <arg line="- -win-menu - -win-menu-group  Scrum"/>
+                                    <arg line="- -win-dir-chooser "/>
+                                    <arg line="- -win-upgrade-uuid 66006de4-3a17-41b3-b4ce-b784f31f2110"/>
+                                </exec>
+                            - ->
+                            <!- -
+                                <exec executable="jpackage" failonerror="true">
+                                    <!- - Generic Options - ->
+                                    <arg line="- -type exe"/>
+                                    <arg line="- -app-version 1.0.2"/>
+                                    <arg line="- -copyright Copyright"/>
+                                    <arg line="- -description 'Clock that stays visible during online meetings.'"/>
+                                    <arg line="- -icon src/main/scrumtimer.ico"/>
+                                    <arg line="- -name ${project.artifactId}"/>
+                                    <arg line="- -dest target"/>
+                                    <arg line="- -vendor Hiran"/>
+                                    <arg line="- -verbose"/>
+
+                                    <!- - Options for creating the application image - ->
+                                    <arg line="- -input target/dist"/>
+
+                                    <!- - Options for creating the application launcher(s) - ->
+                                    <arg line="- -main-class ${mainclass}"/>
+                                    <arg line="- -main-jar ${project.artifactId}-${project.version}.jar"/>
+                                    <!- -
+                                    <arg line="- -module-path target/dist/${project.artifactId}-${project.version}.jar"/>
+                                    <arg line="- -module-path target/dist/log4j-api-2.20.0.jar"/>
+                                    <arg line="- -module-path target/dist/log4j-core-2.20.jar"/>
+                                    <arg line="- -module ScrumTimer/${mainclass}"/>
+                                    - ->
+
+                                    <!- - Windows platform options  - ->
+                                    <arg line="- -win-dir-chooser "/>
+                                    <arg line="- -win-menu - -win-menu-group Scrum"/>
+                                    <arg line="- -win-shortcut"/>
+                                    <arg line="- -win-upgrade-uuid 66006de4-3a17-41b3-b4ce-b784f31f2110"/>
+                                </exec>
+                                - ->
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+                        -->
+        </plugins>
+    </build>
+    <dependencies>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.9.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-params</artifactId>
+            <version>5.9.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.9.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>2.23.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>2.23.0</version>
+        </dependency>
+    </dependencies>
+</project>
