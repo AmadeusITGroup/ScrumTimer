@@ -8,20 +8,16 @@ import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.time.Duration;
 import javax.swing.JWindow;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 /**
  *
  * @author hiran.chaudhuri
  */
 public class MainFrame extends JWindow {
-    private static final Logger log = LogManager.getLogger();
 
     private TimerPanel timerPanel;
 
     public MainFrame() {
-      log.debug("MainFrame()");
         //setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         getContentPane().setLayout(new BorderLayout());
         

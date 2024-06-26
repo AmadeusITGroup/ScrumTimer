@@ -137,6 +137,17 @@ jobs:
         pwd
         find . -not -path "./oolitestarter/.git/*"
         
+    - name: extract artifact
+      run: |
+        cd artifacts && unzip ScrumTimer-${{ needs.semver.outputs.GITVERSION_SEMVER }}-generic.zip
+        
+    - name: Check status 1
+      run: |
+        set
+        echo -n "Current directory: "
+        pwd
+        find . -not -path "./oolitestarter/.git/*"
+        
     - name: Prepare AppImage for Ubuntu
       run: |
         jpackage \
@@ -151,7 +162,7 @@ jobs:
           --verbose \
           --icon scrumtimer/src/main/scrumtimer.png \
           --input artifacts \
-          --main-jar ScrumTimer-${{ needs.semver.outputs.GITVERSION_SEMVER }}-jar-with-dependencies.jar \
+          --main-jar ScrumTimer-${{ needs.semver.outputs.GITVERSION_SEMVER }}.jar \
           --main-class com.amadeus.tpe.src.sca.scrumtimer.MainFrame \
           --resource-dir scrumtimer/src/jpackage/resources-linux \
 
@@ -209,22 +220,35 @@ jobs:
         fetch-depth: 0
         path: scrumtimer
 
+    - name: Check status 1
+      run: |
+        get-childitem . -Recurse | where {!$_.PSIsContainer} | select-object FullName
+
     - name: Download artifacts
       uses: actions/download-artifact@v4
       with:
         name: ScrumTimer-generic
         path: artifacts
 
-    - name: Check status 0
+    - name: Check status 2
+      run: |
+        get-childitem . -Recurse | where {!$_.PSIsContainer} | select-object FullName
+
+    - name: extract artifact (Windows)
+      run: |
+        cd artifacts
+        unzip ScrumTimer-${{ needs.semver.outputs.GITVERSION_SEMVER }}-generic.zip
+        
+    - name: Check status 3
       run: |
         get-childitem . -Recurse | where {!$_.PSIsContainer} | select-object FullName
 
     - name: Prepare AppImage for Windows
       run: |
-        jpackage --type app-image --app-version "${{ needs.semver.outputs.GITVERSION_ASSEMBLYSEMVER }}" --copyright Copyright --description "ScrumTimer ${{ needs.semver.outputs.GITVERSION_SEMVER }}" --name "ScrumTimer" --dest target/appimage --temp target/scrumtimer-tmp --vendor "Amadeus" --verbose --icon scrumtimer/src/main/ScrumTimer.ico --input artifacts --main-jar ScrumTimer-${{ needs.semver.outputs.GITVERSION_SEMVER }}-jar-with-dependencies.jar --main-class com.amadeus.tpe.src.sca.scrumtimer.MainFrame
+        jpackage --type app-image --app-version "${{ needs.semver.outputs.GITVERSION_ASSEMBLYSEMVER }}" --copyright Copyright --description "ScrumTimer ${{ needs.semver.outputs.GITVERSION_SEMVER }}" --name "ScrumTimer" --dest target/appimage --temp target/scrumtimer-tmp --vendor "Amadeus" --verbose --icon scrumtimer/src/main/ScrumTimer.ico --input artifacts --main-jar ScrumTimer-${{ needs.semver.outputs.GITVERSION_SEMVER }}.jar --main-class com.amadeus.tpe.src.sca.scrumtimer.MainFrame
         # --resource-dir src/jpackage/resources
 
-    - name: Check status 2
+    - name: Check status 4
       run: |
         get-childitem . -Recurse | where {!$_.PSIsContainer} | select-object FullName
 
@@ -234,7 +258,7 @@ jobs:
         jpackage --verbose --app-image target/appimage/ScrumTimer --app-version "${{ needs.semver.outputs.GITVERSION_ASSEMBLYSEMVER }}" --name "ScrumTimer" --dest target --win-shortcut --icon scrumtimer/src/main/scrumtimer.ico --win-shortcut --win-menu --win-menu-group ScrumTimer --win-dir-chooser --win-upgrade-uuid 0a18c6bc-0418-47dc-9526-3a48030f6af6
         #--resource-dir src/jpackage/resources
 
-    - name: Check status 3
+    - name: Check status 5
       run: |
         get-childitem . -Recurse | where {!$_.PSIsContainer} | select-object FullName
 
@@ -242,7 +266,7 @@ jobs:
       run: |
         ren "target\ScrumTimer-${{ needs.semver.outputs.GITVERSION_ASSEMBLYSEMVER }}.exe" ScrumTimer-${{ needs.semver.outputs.GITVERSION_SEMVER }}-Windows.exe
 
-    - name: Check status 4
+    - name: Check status 6
       run: |
         get-childitem . -Recurse | where {!$_.PSIsContainer} | select-object FullName
 
@@ -280,6 +304,17 @@ jobs:
         echo -n "Current directory: "
         pwd
         find . -not -path "./scrumtimer/.git/*"
+
+    - name: extract artifact (MacOS)
+      run: |
+        cd artifacts && unzip ScrumTimer-${{ needs.semver.outputs.GITVERSION_SEMVER }}-generic.zip
+        
+    - name: Check status 1
+      run: |
+        set
+        echo -n "Current directory: "
+        pwd
+        find . -not -path "./oolitestarter/.git/*"
         
     - name: Prepare AppImage for MacOS
       run: |
@@ -292,7 +327,7 @@ jobs:
           --temp target/scrumtimer-tmp --vendor "Amadeus" --verbose \
           --icon scrumtimer/src/main/scrumtimer.png \
           --input artifacts \
-          --main-jar ScrumTimer-${{ needs.semver.outputs.GITVERSION_SEMVER }}-jar-with-dependencies.jar \
+          --main-jar ScrumTimer-${{ needs.semver.outputs.GITVERSION_SEMVER }}.jar \
           --main-class com.amadeus.tpe.src.sca.scrumtimer.MainFrame \
           --mac-package-name "ScrumTimer" \
           --resource-dir scrumtimer/src/jpackage/resources-mac \

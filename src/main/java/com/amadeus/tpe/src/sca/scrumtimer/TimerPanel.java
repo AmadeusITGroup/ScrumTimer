@@ -38,15 +38,12 @@ import javax.swing.JWindow;
 import javax.swing.SwingUtilities;
 import javax.swing.event.AncestorEvent;
 import javax.swing.event.AncestorListener;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 /**
  *
  * @author hiran.chaudhuri
  */
 public class TimerPanel extends JPanel implements MouseListener, MouseMotionListener, KeyListener {
-    private static final Logger log = LogManager.getLogger();
 
     /** the time when we want to autostart. */
     private Instant scheduledStart;
@@ -184,7 +181,6 @@ public class TimerPanel extends JPanel implements MouseListener, MouseMotionList
 
             String d = getHumanReadableTime(remaining.getSeconds());
             StringBuilder msg = new StringBuilder(String.format("Render %d -> %s", remaining.getSeconds(), d));
-            log.debug(msg.toString());
 
             // calculate position
             FontMetrics metrics = g2d.getFontMetrics();
@@ -214,7 +210,6 @@ public class TimerPanel extends JPanel implements MouseListener, MouseMotionList
             if (scheduledStart != null) {
                 msg.append(String.format(", starting at %s", scheduledStart));
             }
-            log.debug(msg.toString());
 
             // calculate position
             FontMetrics metrics = g2d.getFontMetrics();
@@ -278,7 +273,6 @@ public class TimerPanel extends JPanel implements MouseListener, MouseMotionList
                             scheduledStart = cp.getStart();
                             total = cp.getDuration();
                             playAudio = cp.getPlaySound();
-                            log.debug("Configured start={}, duration={}", scheduledStart, total);
                             savePreferences();
                             reset();
                         } catch (DateTimeParseException dtpe) {

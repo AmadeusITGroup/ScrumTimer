@@ -13,15 +13,12 @@ import javax.swing.JComponent;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 /**
  *
  * @author hiran.chaudhuri
  */
 public class ConfigurationPanel extends javax.swing.JPanel {
-    private static final Logger log = LogManager.getLogger();
     
     private SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
     
@@ -50,7 +47,6 @@ public class ConfigurationPanel extends javax.swing.JPanel {
             Instant result = time.atDate(LocalDate.now()).atZone(ZoneId.systemDefault()).toInstant();
             return result;
         } catch (Exception e) {
-            log.warn("Could not parse start date", e);
             return null;
         }
     }
