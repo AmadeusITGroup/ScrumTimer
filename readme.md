@@ -8,9 +8,18 @@ screen-sharing so it is visible to everyone without obstructing the way you work
 
 Use the icon or launcher to start the application. It will popup as a small
 circle. 
+
+![](src/main/resources-ext/Standby.png)
+
 Drag it to the desired position on your screen. 
-Click it to start/stop the timer. 
-Right-click it to open the popup menu for further configuration or exit.
+Click it to start the timer. Now it will be visible in running mode.
+
+![](src/main/resources-ext/Running.png)
+
+Drag it to the desired position on your screen. 
+Click it to stop the timer. Now it will be visible in standby mode.
+
+In any mode, right-click it to open the popup menu for further configuration or exit.
 
 ## Installation
 
@@ -29,7 +38,10 @@ This will install the application and add a launcher on your system.
 
 Download the Windows package (ScrumTimer-....exe)
 In Windows Explorer, navigate to the downloaded file and look at the file properties.
-In the `security area` check the box `Unblock`.
-Doubleclick the downloaded file and allow the installer to do it's job.
 
-This will install the appication and add an icon to your start menu.
+![](src/main/resources-ext/Windows-Properties.png)
+
+In the `security area` check the box `Unblock`. Then doubleclick the downloaded
+file and allow the installer to do it's job.
+
+The installer will unpack the application and add an icon to your start menu.

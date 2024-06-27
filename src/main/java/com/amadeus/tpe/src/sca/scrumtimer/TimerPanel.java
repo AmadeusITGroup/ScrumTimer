@@ -40,6 +40,7 @@ import javax.swing.event.AncestorEvent;
 import javax.swing.event.AncestorListener;
 
 /**
+ * Renders the current time status and reacts to user input.
  *
  * @author hiran.chaudhuri
  */
@@ -57,8 +58,14 @@ public class TimerPanel extends JPanel implements MouseListener, MouseMotionList
     private boolean playAudio = false;
     private Timer timer;
     
+    /**
+     * An additional message to be displayed when the mouse enters the timer panel.
+     */
     private JEditorPane gist;
 
+    /**
+     * Creates a new instance.
+     */
     public TimerPanel() {
         reset();
         addMouseListener(this);
@@ -109,28 +116,54 @@ public class TimerPanel extends JPanel implements MouseListener, MouseMotionList
         setBackground(new Color(0, 0, 0, 0));
     }
 
+    /**
+     * Returns true if a sound will be played when time is up.
+     * 
+     * @return true if and only if a sound will be played.
+     */
     public boolean isPlayAudio() {
         return playAudio;
     }
 
+    /**
+     * Defines whether a sound will be played when time is up.
+     * 
+     * @param playAudio true if and only if a sound shall be played.
+     */
     public void setPlayAudio(boolean playAudio) {
         this.playAudio = playAudio;
     }
 
+    /**
+     * Defines the durationn this timer shall cover.
+     * 
+     * @param total the duration
+     */
     public void setTotalDuration(Duration total) {
         this.total = total;
         reset();
     }
 
+    /**
+     * Returns the duration this timer shall cover.
+     * 
+     * @return the duration
+     */
     public Duration getTotalDuration() {
         return total;
     }
 
+    /**
+     * Starts the timer animation.
+     */
     public void start() {
         started = Instant.now();
         stops = Instant.now().plus(total);
     }
 
+    /**
+     * Stops the timer animation and playsaudio if configured.
+     */
     public void stop() {
         started = null;
         stops = null;
@@ -140,18 +173,38 @@ public class TimerPanel extends JPanel implements MouseListener, MouseMotionList
         }
     }
 
+    /**
+     * Returns whether the timer is running.
+     * 
+     * @return true if and only if the timer is running
+     */
     public boolean isRunning() {
         return started != null;
     }
 
+    /**
+     * Stops and resets the timer.
+     */
     public void reset() {
         stop();
     }
     
+    /**
+     * Sets an additional message to be displayed when the mouse enters the 
+     * timer panel. This could e.g. be the meeting agenda, discussion rules etc.
+     * 
+     * @param gist the message
+     */
     public void setGist(JEditorPane gist) {
         this.gist = gist;
     }
 
+    /**
+     * Translates the remaining time into a human readable string.
+     * 
+     * @param seconds the remaining time in seconds
+     * @return the human readable string
+     */
     public static String getHumanReadableTime(long seconds) {
         if (seconds >= 3600) {
             return String.format("%2d h %02d m", seconds / 3600, (seconds % 3600) / 60);
@@ -164,13 +217,13 @@ public class TimerPanel extends JPanel implements MouseListener, MouseMotionList
 
     @Override
     protected void paintComponent(Graphics g) {
-        Graphics2D g2d = (Graphics2D) g;
+        Graphics2D g2d = (Graphics2D)g;
         g2d.setBackground(getBackground());
         g2d.clearRect(0, 0, getWidth(), getHeight());
         
         int squaresize = Math.min(getWidth(), getHeight());
-        int offsetx = (getWidth()-squaresize)/2;
-        int offsety = (getHeight()-squaresize)/2;
+        int offsetx = (getWidth() - squaresize)/2;
+        int offsety = (getHeight() - squaresize)/2;
 
         if (isRunning()) {
             Duration passed = Duration.between(started, Instant.now());
@@ -185,7 +238,7 @@ public class TimerPanel extends JPanel implements MouseListener, MouseMotionList
             // calculate position
             FontMetrics metrics = g2d.getFontMetrics();
             Rectangle2D rect = metrics.getStringBounds(d, g2d);
-            Point strPos = new Point((int) ((getWidth() - rect.getWidth()) / 2), (int) ((getHeight() - rect.getHeight()) / 2) + metrics.getAscent());
+            Point strPos = new Point((int)((getWidth() - rect.getWidth()) / 2), (int)((getHeight() - rect.getHeight()) / 2) + metrics.getAscent());
 
             g2d.setColor(new Color(0, 0, 0, 128));
             //g2d.fillRect(strPos.x-1, (int) ((getHeight() - rect.getHeight()) / 2)-1, (int)rect.getWidth()+2, (int)rect.getHeight()+2);
@@ -195,7 +248,7 @@ public class TimerPanel extends JPanel implements MouseListener, MouseMotionList
             g2d.drawString(d, strPos.x - 1, strPos.y - 1);
 
             g2d.setColor(Color.red);
-            g2d.fillArc(offsetx, offsety, squaresize, squaresize, 90, (int) angle);
+            g2d.fillArc(offsetx, offsety, squaresize, squaresize, 90, (int)angle);
 
             g2d.setColor(Color.black);
             g2d.drawString(d, strPos.x + 2, strPos.y + 2);
@@ -214,7 +267,7 @@ public class TimerPanel extends JPanel implements MouseListener, MouseMotionList
             // calculate position
             FontMetrics metrics = g2d.getFontMetrics();
             Rectangle2D rect = metrics.getStringBounds(d, g2d);
-            Point strPos = new Point((int) ((getWidth() - rect.getWidth()) / 2), (int) ((getHeight() - rect.getHeight()) / 2) + metrics.getAscent());
+            Point strPos = new Point((int)((getWidth() - rect.getWidth()) / 2), (int)((getHeight() - rect.getHeight()) / 2) + metrics.getAscent());
 
             g2d.setColor(Color.black);
             g2d.drawString(d, strPos.x + 2, strPos.y + 2);
@@ -234,38 +287,39 @@ public class TimerPanel extends JPanel implements MouseListener, MouseMotionList
     }
 
     /**
-     * left click starts/stops the timer left doubleclick resets the timer right
-     * click opens context menu
+     * Invoked when the mouse is clicked on the timer panel.
+     * Left click starts/stops the timer left doubleclick resets the timer right
+     * click opens context menu.
      *
-     * @param e
+     * @param e the mouse event
      */
     @Override
     public void mouseClicked(MouseEvent e) {
         if (e.isPopupTrigger() || SwingUtilities.isRightMouseButton(e)) {
             // show context menu (if not shown already)
 
-            JMenuItem JMIabout = new JMenuItem("About...");
-            JMIabout.addActionListener(new ActionListener() {
+            JMenuItem jmiAbout = new JMenuItem("About...");
+            jmiAbout.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     // show properties dialog
-                    JLabel label = new JLabel("<html>ScrumTimer created by Hiran Chaudhuri<br/>Running on "+System.getProperty("java.vm.vendor")+" "+System.getProperty("java.vm.version")+"</html>");
-                    JWindow window = (JWindow) SwingUtilities.getWindowAncestor(TimerPanel.this);
+                    JLabel label = new JLabel("<html>ScrumTimer created by Hiran Chaudhuri<br/>Running on " + System.getProperty("java.vm.vendor") + " " + System.getProperty("java.vm.version") + "</html>");
+                    JWindow window = (JWindow)SwingUtilities.getWindowAncestor(TimerPanel.this);
                     window.setAlwaysOnTop(false);
                     JOptionPane.showMessageDialog(TimerPanel.this, label);
                     window.setAlwaysOnTop(true);
                 }
 
             });
-            JMenuItem JMIconfigure = new JMenuItem("Settings...");
-            JMIconfigure.addActionListener(new ActionListener() {
+            JMenuItem jmiConfigure = new JMenuItem("Settings...");
+            jmiConfigure.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     // show properties dialog
                     ConfigurationPanel cp = new ConfigurationPanel();
                     cp.setDuration(total);
                     cp.setPlaySound(playAudio);
-                    JWindow window = (JWindow) SwingUtilities.getWindowAncestor(TimerPanel.this);
+                    JWindow window = (JWindow)SwingUtilities.getWindowAncestor(TimerPanel.this);
                     window.setAlwaysOnTop(false);
                     if (JOptionPane.showConfirmDialog(TimerPanel.this, cp, "Settings", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) {
                         // if successfull, take data
@@ -283,32 +337,32 @@ public class TimerPanel extends JPanel implements MouseListener, MouseMotionList
                 }
 
             });
-            JMenuItem JMIquit = new JMenuItem("Exit");
-            JMIquit.addActionListener(new ActionListener() {
+            JMenuItem jmiQuit = new JMenuItem("Exit");
+            jmiQuit.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     System.exit(0);
                 }
             });
 
-            JMenuItem JM15m = new JMenuItem("15m");
-            JM15m.addActionListener(new ActionListener() {
+            JMenuItem jmi15m = new JMenuItem("15m");
+            jmi15m.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     setTotalDuration(Duration.ofMinutes(15));
                 }
             });
 
-            JMenuItem JM50m = new JMenuItem("50m");
-            JM50m.addActionListener(new ActionListener() {
+            JMenuItem jmi50m = new JMenuItem("50m");
+            jmi50m.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     setTotalDuration(Duration.ofMinutes(50));
                 }
             });
 
-            JMenuItem JM110m = new JMenuItem("110m");
-            JM110m.addActionListener(new ActionListener() {
+            JMenuItem jmi110m = new JMenuItem("110m");
+            jmi110m.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     setTotalDuration(Duration.ofMinutes(110));
@@ -316,14 +370,14 @@ public class TimerPanel extends JPanel implements MouseListener, MouseMotionList
             });
 
             JPopupMenu menu = new JPopupMenu("Timer");
-            menu.add(JMIabout);
+            menu.add(jmiAbout);
             menu.add(new JSeparator());
-            menu.add(JM15m);
-            menu.add(JM50m);
-            menu.add(JM110m);
+            menu.add(jmi15m);
+            menu.add(jmi50m);
+            menu.add(jmi110m);
             menu.add(new JSeparator());
-            menu.add(JMIconfigure);
-            menu.add(JMIquit);
+            menu.add(jmiConfigure);
+            menu.add(jmiQuit);
             menu.show(this, e.getX(), e.getY());
 
             e.consume();
@@ -403,16 +457,18 @@ public class TimerPanel extends JPanel implements MouseListener, MouseMotionList
     /**
      * Checks whether the given coordinate is visible on one of the attached
      * screens.
-     * @param location
-     * @return 
+     * 
+     * @param location the location in screen coordinates
+     * @return true and only true if one of the screens will show this location
      */
     private boolean isVisible(Point location) {
         GraphicsDevice[] gds = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices();
-        for(GraphicsDevice gd: gds) {
+        for (GraphicsDevice gd: gds) {
             Rectangle r = gd.getDefaultConfiguration().getBounds();
             //System.out.println(gd.getIDstring()+"  "+r);
-            if(r.contains(location))
+            if (r.contains(location)) {
                 return true;
+            }
         }
         return false;
     }
@@ -426,16 +482,16 @@ public class TimerPanel extends JPanel implements MouseListener, MouseMotionList
         Window window = SwingUtilities.getWindowAncestor(this);
         Point defaultLocation = null;
         if (window != null) {
-            defaultLocation = new Point((int) (screenSize.getWidth() - window.getWidth()) / 2, (int) (screenSize.getHeight() - window.getHeight()) / 2);
+            defaultLocation = new Point((int)(screenSize.getWidth() - window.getWidth()) / 2, (int)(screenSize.getHeight() - window.getHeight()) / 2);
         } else {
-            defaultLocation = new Point((int) screenSize.getWidth() / 2, (int) screenSize.getHeight() / 2);
+            defaultLocation = new Point((int)screenSize.getWidth() / 2, (int)screenSize.getHeight() / 2);
         }
         Point location = new Point(prefs.getInt("locationX", defaultLocation.x), prefs.getInt("locationY", defaultLocation.y));
         if (window != null) {
-            if(!isVisible(location)) {
+            if (!isVisible(location)) {
                 location = defaultLocation;
             }
-            System.out.println("Positioning at "+location);
+            System.out.println("Positioning at " + location);
             window.setLocation(location);
         }
         

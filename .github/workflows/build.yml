@@ -160,7 +160,7 @@ jobs:
           --temp target/ScrumTimer-tmp \
           --vendor "Amadeus" \
           --verbose \
-          --icon scrumtimer/src/main/scrumtimer.png \
+          --icon scrumtimer/src/main/resources-ext/scrumtimer.png \
           --input artifacts \
           --main-jar ScrumTimer-${{ needs.semver.outputs.GITVERSION_SEMVER }}.jar \
           --main-class com.amadeus.tpe.src.sca.scrumtimer.MainFrame \
@@ -186,7 +186,7 @@ jobs:
           --app-version "${{ needs.semver.outputs.DEBIAN_PKGVERSION }}" \
           --dest target \
           --license-file scrumtimer/LICENSE \
-          --icon scrumtimer/src/main/scrumtimer.png \
+          --icon scrumtimer/src/main/resources-ext/scrumtimer.png \
           --resource-dir scrumtimer/src/jpackage/resources-linux
           #--linux-shortcut \
           #--linux-menu-group Game \
@@ -245,7 +245,7 @@ jobs:
 
     - name: Prepare AppImage for Windows
       run: |
-        jpackage --type app-image --app-version "${{ needs.semver.outputs.GITVERSION_ASSEMBLYSEMVER }}" --copyright Copyright --description "ScrumTimer ${{ needs.semver.outputs.GITVERSION_SEMVER }}" --name "ScrumTimer" --dest target/appimage --temp target/scrumtimer-tmp --vendor "Amadeus" --verbose --icon scrumtimer/src/main/ScrumTimer.ico --input artifacts --main-jar ScrumTimer-${{ needs.semver.outputs.GITVERSION_SEMVER }}.jar --main-class com.amadeus.tpe.src.sca.scrumtimer.MainFrame
+        jpackage --type app-image --app-version "${{ needs.semver.outputs.GITVERSION_ASSEMBLYSEMVER }}" --copyright Copyright --description "ScrumTimer ${{ needs.semver.outputs.GITVERSION_SEMVER }}" --name "ScrumTimer" --dest target/appimage --temp target/scrumtimer-tmp --vendor "Amadeus" --verbose --icon scrumtimer/src/main/resources-ext/ScrumTimer.ico --input artifacts --main-jar ScrumTimer-${{ needs.semver.outputs.GITVERSION_SEMVER }}.jar --main-class com.amadeus.tpe.src.sca.scrumtimer.MainFrame
         # --resource-dir src/jpackage/resources
 
     - name: Check status 4
@@ -255,7 +255,7 @@ jobs:
     # for upgrades, it seems we need a UUID - see https://stackoverflow.com/a/67442754/4222206
     - name: Finish AppImage for Windows
       run: |
-        jpackage --verbose --app-image target/appimage/ScrumTimer --app-version "${{ needs.semver.outputs.GITVERSION_ASSEMBLYSEMVER }}" --name "ScrumTimer" --dest target --win-shortcut --icon scrumtimer/src/main/scrumtimer.ico --win-shortcut --win-menu --win-menu-group ScrumTimer --win-dir-chooser --win-upgrade-uuid 0a18c6bc-0418-47dc-9526-3a48030f6af6
+        jpackage --verbose --app-image target/appimage/ScrumTimer --app-version "${{ needs.semver.outputs.GITVERSION_ASSEMBLYSEMVER }}" --name "ScrumTimer" --dest target --win-shortcut --icon scrumtimer/src/main/resources-ext/scrumtimer.ico --win-shortcut --win-menu --win-menu-group ScrumTimer --win-dir-chooser --win-upgrade-uuid 0a18c6bc-0418-47dc-9526-3a48030f6af6
         #--resource-dir src/jpackage/resources
 
     - name: Check status 5
@@ -325,7 +325,7 @@ jobs:
           --description "ScrumTimer ${{ needs.semver.outputs.GITVERSION_SEMVER }}" \
           --name "ScrumTimer" --dest target/appimage \
           --temp target/scrumtimer-tmp --vendor "Amadeus" --verbose \
-          --icon scrumtimer/src/main/scrumtimer.png \
+          --icon scrumtimer/src/main/resources-ext/scrumtimer.png \
           --input artifacts \
           --main-jar ScrumTimer-${{ needs.semver.outputs.GITVERSION_SEMVER }}.jar \
           --main-class com.amadeus.tpe.src.sca.scrumtimer.MainFrame \
@@ -356,7 +356,7 @@ jobs:
           --app-version "${{ needs.semver.outputs.MACOS_MAJORMINORPATCH }}" \
           --app-image target/appimage/ScrumTimer.app \
           --name "ScrumTimer" \
-          --icon scrumtimer/src/main/scrumtimer.png \
+          --icon scrumtimer/src/main/resources-ext/scrumtimer.png \
           --dest target \
           --resource-dir scrumtimer/src/jpackage/resources-mac \
           --vendor Amadeus

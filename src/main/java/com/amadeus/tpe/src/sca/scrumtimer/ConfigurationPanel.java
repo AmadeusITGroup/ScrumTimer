@@ -2,7 +2,6 @@
  */
 package com.amadeus.tpe.src.sca.scrumtimer;
 
-import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -15,31 +14,32 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 /**
- *
+ * This panel allows the user to see and edit ScrumTimer's settings.
+ * 
  * @author hiran.chaudhuri
  */
 public class ConfigurationPanel extends javax.swing.JPanel {
     
-    private SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-    
-    /** Defines the time when this component shall automaticallz start.
-     * The date will always be assumed as 'today'.
+    /** 
+     * Defines the time when this component shall automatically start.
+     * The date part will always be assumed as 'today'.
      * 
-     * @param date 
+     * @param instant the timestamp
      */
-    public void setStart(Instant date) {
-        if (date == null) {
+    public void setStart(Instant instant) {
+        if (instant == null) {
             txtStart.setText("");
         } else {
-            LocalTime lt = date.atZone(ZoneId.systemDefault()).toLocalTime();
+            LocalTime lt = instant.atZone(ZoneId.systemDefault()).toLocalTime();
             txtStart.setText(lt.toString());
         }
     }
     
-    /** Returns the time when this component shall automatically start.
+    /** 
+     * Returns the time when this component shall automatically start.
      * The date will always be assumed as 'today'.
      * 
-     * @param date 
+     * @return the instant
      */
     public Instant getStart() {
         try {
@@ -51,26 +51,46 @@ public class ConfigurationPanel extends javax.swing.JPanel {
         }
     }
     
+    /**
+     * Sets the duration to be covered.
+     * 
+     * @param d the duration
+     */
     public void setDuration(Duration d) {
         txtDuration.setText(d.toString());
     }
     
+    /**
+     * Returns the duration to be covered.
+     * 
+     * @return the duration
+     */
     public Duration getDuration() {
         try {
             Duration d = Duration.parse(txtDuration.getText());
             lblError.setText(" ");
             return d;
         }
-        catch(Exception e) {
+        catch (Exception e) {
             lblError.setText(e.getLocalizedMessage());
             throw e;
         }
     }
     
+    /**
+     * Returns whether a sound should go off when time has run out.
+     * 
+     * @return true if and only if a sound should be played
+     */
     public boolean getPlaySound() {
       return cbPlaySound.isSelected();
     }
     
+    /**
+     * Sets whether a sound should go off when time has run out.
+     * 
+     * @param playSound true if and only if a sound should be played
+     */
     public void setPlaySound(boolean playSound) {
       cbPlaySound.setSelected(playSound);
     }
@@ -82,7 +102,7 @@ public class ConfigurationPanel extends javax.swing.JPanel {
     }
 
     /**
-     * Creates new form ConfigurationPanel
+     * Creates new form ConfigurationPanel.
      */
     public ConfigurationPanel() {
         initComponents();
@@ -91,12 +111,12 @@ public class ConfigurationPanel extends javax.swing.JPanel {
         txtDuration.setInputVerifier(new InputVerifier() {
             @Override
             public boolean verify(JComponent input) {
-                String text = ((JTextField) input).getText();
+                String text = ((JTextField)input).getText();
                 try {
                     getDuration();
                     return true;
                 }
-                catch(Exception e) {
+                catch (Exception e) {
                     return false;
                 }
             }
@@ -108,7 +128,7 @@ public class ConfigurationPanel extends javax.swing.JPanel {
                 try {
                     validate();
                 }
-                catch(Exception ex) {
+                catch (Exception ex) {
                     // do nothing
                 }
             }
@@ -118,7 +138,7 @@ public class ConfigurationPanel extends javax.swing.JPanel {
                 try {
                     validate();
                 }
-                catch(Exception ex) {
+                catch (Exception ex) {
                     // do nothing
                 }
             }
@@ -128,7 +148,7 @@ public class ConfigurationPanel extends javax.swing.JPanel {
                 try {
                     validate();
                 }
-                catch(Exception ex) {
+                catch (Exception ex) {
                     // do nothing
                 }
             }

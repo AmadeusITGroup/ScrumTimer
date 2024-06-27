@@ -1,4 +1,5 @@
-/*
+/**
+ * ScrumTimer only uses Swing and Preferences.
  */
 module ScrumTimer {
   requires java.desktop;

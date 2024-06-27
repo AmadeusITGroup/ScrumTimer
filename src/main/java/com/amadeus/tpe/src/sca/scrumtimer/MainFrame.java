@@ -10,13 +10,18 @@ import java.time.Duration;
 import javax.swing.JWindow;
 
 /**
- *
+ * This class is the main entrypoint that builds the undecorated always-on-top
+ * window for the application to run in.
+ * 
  * @author hiran.chaudhuri
  */
 public class MainFrame extends JWindow {
 
     private TimerPanel timerPanel;
 
+    /**
+     * Creates a new application window.
+     */
     public MainFrame() {
         //setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         getContentPane().setLayout(new BorderLayout());
@@ -40,10 +45,21 @@ public class MainFrame extends JWindow {
         pack();
     }
     
+    /**
+     * Set the duration this instance shall cover.
+     * 
+     * @param d the duration
+     */
     public void setTotalDuration(Duration d) {
         timerPanel.setTotalDuration(d);
     }
 
+    /**
+     * The main entry point for the application.
+     * Allows one parameter (the duration string) to be set.
+     * 
+     * @param args the command line arguments
+     */
     public static void main(String[] args) {
         // Determine if the GraphicsDevice supports translucency.
         GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
@@ -55,19 +71,19 @@ public class MainFrame extends JWindow {
             System.exit(0);
         }
         
-        if(args.length>1) {
+        if (args.length > 1) {
             System.err.println("Only one parameter (duration) is supported");
             System.exit(1);
         }
         
         try {
             MainFrame mainframe = new MainFrame();
-            if(args.length==1) {
+            if (args.length == 1) {
                 mainframe.setTotalDuration(Duration.parse(args[0]));
             }
             mainframe.setVisible(true);
         }
-        catch(Exception e) {
+        catch (Exception e) {
             e.printStackTrace();
             System.exit(2);
         }
